@@ -111,11 +111,20 @@ promedioSobreUmbral a s =
     n = length mayores
 
 -- B2
+movimientos :: [(Int, Int)]
+movimientos = [(-2,-1), (-2,1), (-1,-2), (-1,2), (1,-2), (1,2), (2,-1), (2,1)]
+
 movimientosCaballo :: (Int, Int) -> [(Int, Int)]
-movimientosCaballo = undefined
+movimientosCaballo (p, q) =  [(a, b) | (a, b) <- (map (\(x, y) -> (x + p, y + q)) movimientos), a>0 && b> 0 && a<9 && b<9]
+
+sinRepetidos :: Eq a => [a] -> [a]
+sinRepetidos = foldr (\x acc -> if x `elem` acc then acc else x : acc) []
 
 enDosSaltos :: (Int, Int) -> Int
-enDosSaltos = undefined
+enDosSaltos (p, q) = length ( sinRepetidos[ (a + c, b + d) | (a, b) <- movimientos, (c, d) <- unSalto, a+c>0 && b+d> 0 && a+c<9 && b+d<9])
+
+  where
+    unSalto = movimientosCaballo (p, q)
 
 -- B3
 miMap :: (a -> b) -> [a] -> [b]
