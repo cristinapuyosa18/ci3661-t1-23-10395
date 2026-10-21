@@ -68,11 +68,29 @@ mayorYMenor [] = Nothing
 mayorYMenor (x:xs) = Just (mymAcarreo (x, x) xs)
 
 -- A3
+esDigito :: Char -> Bool
+esDigito c = c >= '0' && c <= '9'
+
 leerHora :: String -> Either String (Int, Int)
-leerHora = undefined
+leerHora [a, b, ':', d, e] 
+  | not (esDigito a && esDigito b && esDigito d && esDigito e) = Left "formato inválido"
+  | (read [a, b] :: Int) >= 24 = Left "hora fuera de rango"
+  | (read [d, e] :: Int) >= 60 = Left "minutos fuera de rango"
+  | otherwise = Right ((read [a, b] :: Int), (read [d, e] :: Int))
+leerHora _ = Left "formato inválido" 
 
 duracion :: String -> String -> Either String Int
-duracion = undefined
+duracion str1 str2 = 
+  case leerHora str1 of
+    Left err1 -> Left err1
+    Right (h1, m1) -> 
+      case leerHora str2 of
+        Left err2 -> Left err2
+        Right (h2, m2) -> 
+          if h2*60 + m2 >= h1*60 +m1 
+            then Right ((h2 - h1)*60 + m2 - m1)
+          else 
+            Right ((24 + h2 - h1)*60 + m2 - m1)
 
 -- =====================================================================
 -- Parte B: orden superior.
