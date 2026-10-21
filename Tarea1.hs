@@ -1,8 +1,8 @@
 -- =====================================================================
 --  CI-3661 — Tarea 1 (Haskell) — Septiembre–Diciembre 2026
 --
---  Nombre:
---  Carnet:
+--  Nombre: Cristina Puyosa
+--  Carnet: 23-10395
 --
 --  Declaración de uso de herramientas de IA (obligatoria, ver enunciado):
 --
@@ -33,8 +33,19 @@ import Data.Char (isAlphaNum, isDigit, toLower, digitToInt)
 -- =====================================================================
 
 -- A1
+transformar ::  String -> String
+transformar [] = []
+transformar (x:xs) = 
+  if isAlphaNum x 
+    then toLower x : transformar(xs)
+    else transformar(xs)
+
+inverso :: String -> String
+inverso [] = []
+inverso (x:xs) = inverso(xs) : x
+
 esPalindromo :: String -> Bool
-esPalindromo = undefined
+esPalindromo x = transformar x == inverso (transformar x)
 
 -- A2
 -- Explica aquí, en dos o tres líneas, por qué tu solución recorre la
