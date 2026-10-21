@@ -100,7 +100,15 @@ duracion str1 str2 =
 
 -- B1
 promedioSobreUmbral :: Double -> [Double] -> Maybe Double
-promedioSobreUmbral = undefined
+promedioSobreUmbral a s = 
+  if n > 0 
+    then Just ((foldr (+) 0 mayores)/ fromIntegral n)
+  else 
+    Nothing
+
+  where
+    mayores = [x | x <- s, x > a]
+    n = length mayores
 
 -- B2
 movimientosCaballo :: (Int, Int) -> [(Int, Int)]
