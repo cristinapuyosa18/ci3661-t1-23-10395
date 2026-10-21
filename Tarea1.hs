@@ -49,10 +49,23 @@ esPalindromo x = transformar x == inverso (transformar x)
 
 -- A2
 -- Explica aquí, en dos o tres líneas, por qué tu solución recorre la
--- lista una sola vez:
+-- lista una sola vez: porque La función procesa la lista mediante
+-- recursión de cola sobre el patrón (x:xs), evaluando cada elemento x 
+-- exactamente una vez en cada paso recursivo
 --
+
+mymAcarreo :: Ord a => (a, a) -> [a] -> (a, a)
+mymAcarreo (a,b), [] = (a, b)
+mymAcarreo (a,b) (x:xs) = 
+  if x > a
+    then  mymAcarreo (x, b) xs
+  else if x < b 
+    then  mymAcarreo (a, x) xs
+  else mymAcarreo (a, b) xs
+
 mayorYMenor :: Ord a => [a] -> Maybe (a, a)
-mayorYMenor = undefined
+mayorYMenor [] = Nothing
+mayorYMenor (x:xs) = Just (mymAcarreo (x, x) xs)
 
 -- A3
 leerHora :: String -> Either String (Int, Int)
