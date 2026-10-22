@@ -128,10 +128,12 @@ enDosSaltos (p, q) = length ( sinRepetidos[ (a + c, b + d) | (a, b) <- movimient
 
 -- B3
 miMap :: (a -> b) -> [a] -> [b]
-miMap = undefined
+miMap f arr = foldr (\x acc -> f x:acc) [] arr
 
 miFilter :: (a -> Bool) -> [a] -> [a]
-miFilter = undefined
+miFilter f arr = foldr (\x acc -> if f x then x:acc else acc) [] arr
 
 miFoldl :: (b -> a -> b) -> b -> [a] -> b
-miFoldl = undefined
+miFoldl f z xs = foldr paso id xs z
+  where
+    paso x g acc = g (f acc x)
