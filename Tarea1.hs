@@ -48,10 +48,11 @@ esPalindromo :: String -> Bool
 esPalindromo x = transformar x == inverso (transformar x)
 
 -- A2
--- Explica aquí, en dos o tres líneas, por qué tu solución recorre la
--- lista una sola vez: porque La función procesa la lista mediante
--- recursión de cola sobre el patrón (x:xs), evaluando cada elemento x 
--- exactamente una vez en cada paso recursivo
+-- Mi solución hace un solo recorrido porque la función mymAcarreo
+-- lleva el par (mayor, menor) como acumulador. En cada paso compara el
+-- elemento actual con ambos valores, actualiza el que corresponda y sigue
+-- con el resto de la lista. Así cada elemento se consume una sola vez y no
+-- hace falta una segunda pasada para calcular el mínimo
 --
 
 mymAcarreo :: Ord a => (a, a) -> [a] -> (a, a)
@@ -102,13 +103,16 @@ duracion str1 str2 =
 promedioSobreUmbral :: Double -> [Double] -> Maybe Double
 promedioSobreUmbral a s = 
   if n > 0 
-    then Just ((foldr (+) 0 mayores)/ fromIntegral n)
+    then Just (suma/ fromIntegral n)
   else 
     Nothing
-
+    
   where
-    mayores = [x | x <- s, x > a]
-    n = length mayores
+    (suma, n) = foldr paso (0, 0) s
+    paso x (sumaAcc, cuenta) =
+      if x > a
+        then (sumaAcc + x, cuenta + 1)
+        else (sumaAcc, cuenta) 
 
 -- B2
 movimientos :: [(Int, Int)]
