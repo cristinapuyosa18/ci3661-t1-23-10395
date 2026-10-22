@@ -4,8 +4,15 @@
 --  Nombre: Cristina Puyosa
 --  Carnet: 23-10395
 --
---  Declaración de uso de herramientas de IA (obligatoria, ver enunciado):
---
+-- Declaración de uso de herramientas de IA (obligatoria, ver enunciado):
+--  Utilicé un asistente de Gemini y Claude para:
+--  1. Consultar dudas sobre sintaxis en Haskell, sistemas de tipos, pattern matching y usos de foldr
+--     foldl y funciones lamda.
+--  2. Diagnosticar errores de compilación reportados por GHC/GHCi 
+--  3. Verificar el cumplimiento de las restricciones de las Partes A y B 
+--     (identificar usos no permitidos de recursión, listas por comprensión o funciones 
+--     prohibidas y orden superior)
+-- 4. Redacción de readme y comentarios
 -- =====================================================================
 --  No cambies el nombre del módulo ni la lista de exportación, ni las
 --  firmas de las funciones. Puedes agregar todas las funciones auxiliares
@@ -24,7 +31,7 @@ module Tarea1
   , miFoldl
   ) where
 
-import Data.Char (isAlphaNum, isDigit, toLower, digitToInt)
+import Data.Char (isAlphaNum, toLower)
 
 -- =====================================================================
 -- Parte A: recursión explícita.
@@ -33,16 +40,17 @@ import Data.Char (isAlphaNum, isDigit, toLower, digitToInt)
 -- =====================================================================
 
 -- A1
+
 transformar ::  String -> String
 transformar [] = []
 transformar (x:xs) = 
-  if isAlphaNum x 
-    then toLower x : transformar(xs)
-    else transformar(xs)
+  if isAlphaNum x
+    then [toLower x] ++ transformar(xs)
+  else transformar(xs)
 
 inverso :: String -> String
 inverso [] = []
-inverso (x:xs) = inverso(xs) : x
+inverso (x:xs) = inverso(xs) ++ [x]
 
 esPalindromo :: String -> Bool
 esPalindromo x = transformar x == inverso (transformar x)
@@ -53,10 +61,9 @@ esPalindromo x = transformar x == inverso (transformar x)
 -- elemento actual con ambos valores, actualiza el que corresponda y sigue
 -- con el resto de la lista. Así cada elemento se consume una sola vez y no
 -- hace falta una segunda pasada para calcular el mínimo
---
 
 mymAcarreo :: Ord a => (a, a) -> [a] -> (a, a)
-mymAcarreo (a,b), [] = (a, b)
+mymAcarreo (a,b) [] = (a, b)
 mymAcarreo (a,b) (x:xs) = 
   if x > a
     then  mymAcarreo (x, b) xs
@@ -100,15 +107,17 @@ duracion str1 str2 =
 -- =====================================================================
 
 -- B1
+
 promedioSobreUmbral :: Double -> [Double] -> Maybe Double
 promedioSobreUmbral a s = 
   if n > 0 
     then Just (suma/ fromIntegral n)
   else 
     Nothing
-    
+
   where
     (suma, n) = foldr paso (0, 0) s
+    paso :: Double -> (Double, Int) -> (Double, Int)
     paso x (sumaAcc, cuenta) =
       if x > a
         then (sumaAcc + x, cuenta + 1)
